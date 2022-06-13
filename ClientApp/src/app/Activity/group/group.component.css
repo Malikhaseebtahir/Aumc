@@ -1,0 +1,49 @@
+.card-inner{
+    margin-left: 4rem;
+}
+
+.img-rounded {
+    border-radius: 50%;
+}
+
+.image-height-new-comment {
+    height: 80px;
+}
+
+.card-width {
+    width: 678px;
+}
+
+.margin-left {
+    margin-left: 365px;
+}
+
+.image-height-comment {
+    height: 70px;
+}
+
+.btn-color {
+    color: white;
+}
+
+#showcase{
+    position:relative;
+    background:url('../../../assets/mountain.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    min-height:600px;
+  
+  }
+
+  .primary-overlay{
+    background:rgba(50,146,166,0.8);
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+
+.cloud-size {
+    font-size: 100px;
+}

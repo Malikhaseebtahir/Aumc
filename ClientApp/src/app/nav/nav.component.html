@@ -1,0 +1,184 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top">
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/home']">
+      <img src="{{'../../../assets/logo.png'}}" alt="">
+    </a>
+
+    <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/members']">
+          <i class="fa fa-users" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/lists']">
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/messages']">
+          <i class="fa fa-comments" aria-hidden="true"></i>
+        </a>
+      </li>
+      <li *appHasRole="['Admin']" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/admin']">
+          <i class="fa fa-user">Admin</i>
+        </a>
+      </li>
+      <li *appHasRole="['Moderator']" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/teacher']">
+          <i class="fa fa-user">Teacher</i>
+        </a>
+      </li>
+      <li *appHasRole="['Member']" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/student']">
+          <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
+
+    <div *ngIf="loggedIn()" class="dropdown" dropdown>
+      <span class="mr-1">
+        <img src="{{photoUrl || '../../assets/user.png'}}" alt="" class="rounded-circle">
+      </span>
+      <a class="dropdown-toggle text-light" dropdownToggle>
+        Welcome {{authService.decodedToken?.unique_name | titlecase}}
+      </a>
+
+      <!-- <span class="ml-5 notification">
+        <button type="button" class="btn"
+          popover="{{ html }}"
+          popoverTitle="Notifications"
+          placement="bottom">
+          <i class="fa fa-globe display"></i>
+          <span class="badge badge-secondary">{{ notifications.length }}</span>
+        </button>
+      </span>
+       -->
+      <span *ngIf="authService.loggedIn()" class="ml-5 notification">
+        <button class="btn" (click)="openModal(template)">
+          <i class="fa fa-globe display"></i>
+          <span *ngIf="notifications.length != 0" class="badge badge-secondary">{{ notifications.length }}</span>
+        </button>
+      </span>
+
+      <div class="dropdown-menu mt-3" *dropdownMenu>
+        <a class="dropdown-item" [routerLink]="['/member/edit']">
+          <i class="fa fa-user"></i> Edit Profile</a>
+        <div *appHasRole="['Admin']">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" [routerLink]="['/block/Users/list']">
+          <i class="fa fa-user"></i> List of block user</a>
+        </div>
+        <div *appHasRole="['Member', 'Moderator']">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" [routerLink]="['/following']">
+          <i class="fa fa-user"></i> Who I'm following</a>
+        </div>
+        <div *appHasRole="['Member', 'Moderator']">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" [routerLink]="['/join/groups']">
+          <i class="fa fa-users"></i> Groups i have join</a>
+        </div>
+        <div *appHasRole="['Member', 'Moderator']">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" [routerLink]="['/pending/requests']">
+          <i class="fa fa-users"></i> View pending request</a>
+        </div>
+        <div *appHasRole="['Member', 'Moderator', 'Admin']">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" [routerLink]="['/university/news']">
+          <i class="fa fa-users"></i> University News</a>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">
+          <i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </div>
+
+    <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+      <input class="form-control mr-sm-2" type="text" name="username" placeholder="RegID" required [(ngModel)]="model.username">
+      <input class="form-control mr-sm-2" type="password" name="password" placeholder="Password" required [(ngModel)]="model.password">
+      <button [disabled]="!loginForm.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+    </form>
+  </div>
+</nav>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Notifications <i class="fa fa-globe"></i></h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul *ngFor="let notification of notifications">
+      <li *ngIf="notification.type == 1">
+        <a [routerLink]="['/members/', notification.group.user.id]" (click)="modalRef.hide()">
+          {{notification.group.user.knownAs}}
+        </a> has delete the <strong>{{ notification.group.subject }}</strong> group </li>
+    
+      <li *ngIf="notification.type == 2">
+        <a [routerLink]="['/members/', notification.group.user.id]" (click)="modalRef.hide()">
+          {{ notification.group.user.knownAs }}
+        </a> has update the 
+          <a 
+            (click)="modalRef.hide()"
+            [routerLink]="['/group/details/', notification.group.id]">
+            <strong>{{ notification.group.subject }} </strong>
+          </a> 
+        group
+      </li>
+
+      <li *ngIf="notification.type == 3">
+        <a [routerLink]="['/members/', notification.group.user.id]" (click)="modalRef.hide()">
+          {{ notification.group.user.knownAs }}
+        </a> has addedd the new <strong>Post</strong> in 
+        <a 
+          (click)="modalRef.hide()"
+          [routerLink]="['/group/details/', notification.group.id]">
+          <strong>{{ notification.group.subject }}</strong>
+        </a> 
+        group
+      </li>
+
+      <li *ngIf="notification.type == 4">
+        <a [routerLink]="['/members/', notification.group.user.id]" (click)="modalRef.hide()">
+          {{ notification.group.user.knownAs }}
+        </a> has update the <strong>Post</strong> of 
+        <a 
+          (click)="modalRef.hide()"
+          [routerLink]="['/group/details/', notification.group.id]">
+          <strong>{{ notification.group.subject }} 
+          </strong>
+        </a> 
+        group
+      </li>
+
+      <li *ngIf="notification.type == 5">
+        <a [routerLink]="['/members/', notification.group.user.id]" (click)="modalRef.hide()">
+          {{ notification.group.user.knownAs }}
+        </a> has deleted the post <strong>Post</strong> in 
+        <a 
+          (click)="modalRef.hide()"
+          [routerLink]="['/group/details/', notification.group.id]">
+          <strong>{{ notification.group.subject }} 
+          </strong>
+        </a> 
+        group
+      </li>
+
+      <li *ngIf="notification.type == 6">
+        <a [routerLink]="['/members/', notification.follower.id]" (click)="modalRef.hide()">
+          {{ notification.follower.knownAs }}
+        </a> has started <strong>following</strong> you
+      </li>
+
+      <li *ngIf="notification.type == 7">
+        <a [routerLink]="['/members/', notification.liker.id]" (click)="modalRef.hide()">
+          {{ notification.liker.knownAs }}
+        </a> has <strong>Like</strong> you profile
+      </li>
+    </ul>
+  </div>
+</ng-template>

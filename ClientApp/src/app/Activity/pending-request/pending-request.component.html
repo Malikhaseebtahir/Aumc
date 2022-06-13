@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="btn-group mt-5">
+      <button class="btn btn-primary" [(ngModel)]="messageContainer" btnRadio="Unread" (click)="loadStudyGroupPendingRequest()">
+        Study Groups
+      </button>
+      <button class="btn btn-primary" [(ngModel)]="messageContainer" btnRadio="Inbox" (click)="loadStudentGroupPendingRequest()">
+        Student Group
+      </button>
+    </div>
+  </div>
+
+    <div class="row mb-5">
+        <div class="text-center">
+            <h4 *ngIf="requests.length == 0" class="mt-4">you have not join any yet</h4>
+            <h4 *ngIf="requests.length != 0" class="mt-4 mb-3">Groups i have joined</h4>
+            <div *ngFor="let group of requests" class="card mt-4">
+                <div class="card-header">
+                    <div>
+                        <tabset>
+                          <tab heading="Group" id="tab1">
+                            <div class="card-body padding-right padding-left">
+                                <h5 class="card-title">{{ group.group.subject }}</h5>
+                                <p class="card-text">{{ group.group.description }}</p>
+                                <a *ngIf="group.group.className != null" (click)="cancelRequest(group.group.id)" class="btn btn-primary text-white btn-sm">Cancel request</a>
+                                <a *ngIf="group.group.className == null" (click)="cancelStudentGroupRequest(group.group.id)" class="btn btn-primary text-white btn-sm">Cancel request</a>
+                              </div>  
+                          </tab>
+                          <tab heading="Admin">
+                            <div class="card" style="width: 18rem;">
+                                <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{group.group.user.url || '../../../assets/user.png'}}" alt="Admin photo">
+                                <div class="card-body-user">
+                                  <h5 class="card-title">{{ group.group.user.knownAs }}</h5>
+                                  <p class="card-text">{{ group.group.teacherOrStudent }}</p>
+                                  <a [routerLink]="['/members/', group.group.user.id]" class="btn btn-primary mb-2">Details</a>
+                                </div>
+                            </div>                              
+                          </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>

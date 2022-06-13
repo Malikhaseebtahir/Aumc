@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row mb-5">
+        <div class="text-center">
+            <h4 *ngIf="pendingPosts.length == 0" class="mt-4">no pending request</h4>
+            <h4 *ngIf="pendingPosts.length != 0" class="mt-4 mb-3">Pending Posts</h4>
+            <div *ngFor="let group of pendingPosts" class="card mt-4">
+                <div class="card-header">
+                    <div>
+                        <tabset>
+                          <tab heading="Post" id="tab1">
+                            <div class="card-body padding-right padding-left">
+                                <h5 class="card-title">{{ group.title }}</h5>
+                                <p class="card-text">{{ group.description }}</p>
+                                <a (click)="approveRequest(group.id)" class="btn btn-primary text-white btn-sm">approve request</a>
+                                <a (click)="rejectRequest(group.id)" class="btn btn-danger text-white btn-sm ml-2">reject request</a>
+                              </div>  
+                          </tab>
+                          <!-- <tab heading="Admin">
+                            <div class="card" style="width: 18rem;">
+                                <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{group.group.user.url || '../../../assets/user.png'}}" alt="Admin photo">
+                                <div class="card-body-user">
+                                  <h5 class="card-title">{{ group.group.user.knownAs }}</h5>
+                                  <p class="card-text">{{ group.group.teacherOrStudent }}</p>
+                                  <a [routerLink]="['/members/', group.group.user.id]" class="btn btn-primary mb-2">Details</a>
+                                </div>
+                            </div>                              
+                          </tab> -->
+                        </tabset>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+
+.padding-left {
+    padding-left: 165px;
+}
+
+.padding-right {
+    padding-right: 165px;
+}
+
+.card-body-user {
+    flex: 1 1 auto;
+    padding: 0.25rem;
+}

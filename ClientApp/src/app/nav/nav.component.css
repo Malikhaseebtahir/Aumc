@@ -1,0 +1,33 @@
+.dropdown-toggle, .dropdown-item {
+    cursor: pointer;
+}
+
+img {
+    max-height: 50px;
+    display: inline;
+}
+
+.display {
+    font-size: 25px;
+    color: white;
+}
+
+.notification {
+    position: relative;
+}
+
+.notification .badge {
+    position: absolute;
+    top: -9px;
+    left: 27px;
+    background: #a80a0a;
+}
+
+.popover-body {
+    width: 202px;
+} 
+
+::ng-deep .navCss nav
+{
+      background-color: #0099CC;
+}

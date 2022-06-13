@@ -1,0 +1,39 @@
+
+<div class="container">
+    <div class="row">
+      <div class="mt-5">
+        <h3 *ngIf="groupUsers.length != 0" class="mb-2">Group Users</h3>
+        <h3 *ngIf="groupUsers.length == 0">No user join the group yet</h3>
+        <table *ngIf="groupUsers.length != 0" class="table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Title</th>
+                <th scope="col">Join Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of groupUsers">
+                <td>
+                    <a [routerLink]="['/members/', user.user.id]">
+                        <img src="{{user.user.url || '../../../assets/user.png'}}" class="img-circle rounded-circle mr-1">                    
+                        {{user.user.knownAs}}
+                    </a>
+                </td>
+                <td>{{ user.user.teacherOrStudent }}</td>
+                <td>{{ user.dateJoin | date: 'mediumDate' }}</td>
+                <td>
+                  <button
+                    *ngIf="authService.decodedToken.nameid == user.user.id"
+                    (click)="leaveGroup(user.groupId, user.user.id)" 
+                    class="btn btn-primary btn-sm">
+                    Leave Group
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>        
+      </div>
+    </div>
+  </div>
+  <!-- *ngIf="authService.decodedToken.nameid == user.user.id" -->

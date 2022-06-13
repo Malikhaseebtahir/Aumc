@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="groups.length != 0; else noGroup">
+      <div class="col-sm-2" *ngFor="let group of groups">
+        <h4>{{group.userName}}</h4>
+        <img src="{{group.url}}" class="img-thumbnail p-1" alt="group.userName">
+        
+        <div class="text-center">
+          <button type="button" class="btn btn-sm btn-success mr-1"
+            (click)="approvegroup(group.id)">Approve</button>
+          <button type="button" class="btn btn-sm btn-danger"
+            (click)="rejectgroup(group.id)">Reject</button>
+        </div>
+      </div>
+    </div>
+    <ng-template #noGroup>
+      <h3 class="ml-3">No groups for approval</h3>
+    </ng-template>
+  </div>
+</div>

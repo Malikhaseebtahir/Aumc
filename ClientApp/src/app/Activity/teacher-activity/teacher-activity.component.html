@@ -1,0 +1,23 @@
+<div class="container mt-5">
+    <h2>Teacher Panel</h2>
+    <button class="btn btn-primary" (click)="openModalWithComponent()">Create New</button>
+    <div class="tab-panel">
+        <tabset class="member-tabset">
+            <tab heading="All Groups">
+                <div *ngFor="let group of allGroups">
+                    <app-group-card [group]="group"></app-group-card>
+                </div>
+            </tab>
+            <tab heading="Groups I have created">
+                <div *ngFor="let group of groups">
+                    <app-group-card [group]="group"></app-group-card>
+                </div>            
+            </tab>        
+            <tab heading="Pending Request">
+                <div *ngFor="let group of pendingRequests">
+                    <app-pending-groups-management [group]="group"></app-pending-groups-management>
+                </div>            
+            </tab>
+        </tabset>
+    </div>
+</div>

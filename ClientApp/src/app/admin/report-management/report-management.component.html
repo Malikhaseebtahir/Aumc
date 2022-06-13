@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="reports.length != 0;then yes else noReports"></div>
+    <ng-template #yes>
+      <div class="col-sm-4" *ngFor="let report of reports">
+          <div class="card border-success mb-3" style="max-width: 18rem;">
+              <div class="card-header bg-transparent border-success">
+                  <h4>Report # {{report.id}}</h4>
+                  <button class="btn btn-success pull-left" (click)="openModalForApprove(approve)">Approve</button>
+                  <button class="btn btn-danger pull-right" (click)="rejectReport(report.id)">Reject</button>
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ report.message }}</p>
+              </div>
+              <div class="card-footer bg-transparent border-success">
+                  <button class="btn btn-primary pull-left" (click)="openModal(template)">Reporter</button>
+                  <button class="btn btn-primary pull-right" (click)="openModalForReportee(reportee)">Reportee</button>
+              </div>
+            </div>
+            <ng-template #template>
+                <div class="modal-header">
+                  <h4 class="modal-title pull-left">User details</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card" style="width: 29rem;">
+                        <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{report.reporter.url || '../../../assets/user.png'}}" alt="{{ report.reporter.knownAs }}">
+                        <div class="card-body-user text-center">
+                          <h5 class="card-title">{{ report.reporter.knownAs }}</h5>
+                          <p class="card-text">{{ report.reporter.teacherOrStudent }}</p>
+                          <a [routerLink]="['/members/', report.reporter.id]" (click)="modalRef.hide()" class="btn btn-primary">More Details</a>
+                        </div>
+                    </div> 
+                </div>
+            </ng-template>
+            <ng-template #reportee>
+                <div class="modal-header">
+                  <h4 class="modal-title pull-left">User details</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card" style="width: 29rem;">
+                        <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{report.reportee.url || '../../../assets/user.png'}}" alt="{{ report.reportee.knownAs }}">
+                        <div class="card-body-user text-center">
+                          <h5 class="card-title">{{ report.reportee.knownAs }}</h5>
+                          <p class="card-text">{{ report.reportee.teacherOrStudent }}</p>
+                          <a [routerLink]="['/members/', report.reportee.id]" (click)="modalRef.hide()" class="btn btn-primary">More Details</a>
+                        </div>
+                    </div> 
+                </div>
+            </ng-template>
+            <ng-template #approve>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Report Approve</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" [(ngModel)]="reportDetails.message" name="message" cols="30" rows="5" class="form-control"></textarea>
+                  </div>
+                  <button class="btn btn-primary pull-right" (click)="approveReport(report.id)">Submit</button>
+                </form>
+              </div>              
+            </ng-template>
+      </div>
+    </ng-template>
+    <ng-template #noReports>
+      <h3 class="ml-3">No Reports</h3>
+    </ng-template>
+  </div>
+</div>
+

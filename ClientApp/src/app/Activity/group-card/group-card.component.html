@@ -1,0 +1,50 @@
+<div class="container mt-2 mb-4">
+  <div class="row">
+    <div class="col-md-3 col-sm-6">
+      <div class="serviceBox">
+        <h3 class="title">{{ group.subject }}</h3>
+        <button 
+          *ngIf="authService.decodedToken.nameid != group.userId && group.title == 'teacher'" 
+          class="pull-left btn btn-info btn-sm" (click)="joinGroup(group.id)">Join</button>
+        <button 
+          *ngIf="authService.decodedToken.nameid != group.userId && group.title == 'student'" 
+          class="pull-left btn btn-info btn-sm" (click)="joinStudentGroup(group.id)">Join</button>
+        <p class="description">{{ group.description }}</p>
+        <div class="service-icon">
+            <span><i class="fa fa-graduation-cap"></i></span>
+        </div>
+        <a (click)="openModal(template)" class="read-more">Created By</a>
+        <a 
+          *ngIf="group.userId == authService.decodedToken.nameid && group.title == 'teacher'" 
+          [routerLink]="['/group/details', group.id]" 
+          class="read-more mt-4">More</a>
+        <a 
+          *ngIf="group.userId == authService.decodedToken.nameid && group.title == 'student'" 
+          [routerLink]="['/student/group/details', group.id]" 
+          class="read-more mt-4">More</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Group Admin</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="card" style="width: 29rem;">
+          <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{group.url || '../../../assets/user.png'}}" alt="{{ group.name }}">
+          <div class="card-body-user text-center">
+            <h5 class="card-title">{{ group.name }}</h5>
+            <p class="card-text">{{ group.title }}</p>
+            <a [routerLink]="['/members/', group.userId]" (click)="bsModalRef.hide()" class="btn btn-primary">More Details</a>              
+          </div>
+      </div> 
+    </div>      
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+    </div>    
+</ng-template>  

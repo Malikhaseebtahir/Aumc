@@ -1,0 +1,30 @@
+
+<div class="container">
+    <div class="row">
+        <div class="mt-5">
+            <h3 class="mb-2">List of all the time block users</h3>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Class</th>
+                    <th scope="col">No of time</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of users">
+                    <th scope="row">{{ user.id }}</th>                    
+                    <td>
+                        <img src="{{user.url || '../../../assets/user.png'}}" class="img-circle rounded-circle mr-1">                    
+                        {{ user.knownAs }}</td>
+                    <td>{{ user.className }}</td>
+                    <td>1</td>
+                    <td>{{ user.message }}</td>
+                  </tr>
+                </tbody>
+              </table>        
+        </div>
+    </div>
+</div>

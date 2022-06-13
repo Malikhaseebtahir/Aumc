@@ -1,0 +1,203 @@
+<!-- <div class="container mt-5">
+  <div *ngIf="!registerMode" style="text-align: center">
+    <h1>Find your friends</h1>
+    <p class="lead">Come on in to view your friends... All you need to do is sign up!</p>
+    <div class="text-center">
+      <button class="btn btn-primary btn-lg mr-2" (click)="registerToggle()">Register</button>
+      <button class="btn btn-info btn-lg">Learn more</button>
+    </div>
+  </div>
+
+  <div *ngIf="registerMode" class="container">
+    <div class="row justify-content-center">
+      <div class="col-4">
+        <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<header id="home-section">
+  <div class="dark-overlay">
+    <div class="home-inner">
+      <div class="container">
+        <div class="row text-white">
+          <div class="col-lg-8 d-none d-lg-block">
+            <h1 class="display-4">Build <strong>social profiles</strong> and connect with your <strong>friends</strong> and <strong>University</strong></h1>
+            <div class="d-flex flex-row">
+              <div class="p-4 align-self-start">
+                <i class="fa fa-check"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas, architecto, quaerat. Quis cum eius itaque ipsa magni quam, illo molestias
+              </div>
+            </div>
+
+            <div class="d-flex flex-row">
+              <div class="p-4 align-self-start">
+                <i class="fa fa-check"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas, architecto, quaerat. Quis cum eius itaque ipsa magni quam, illo molestias
+              </div>
+            </div>
+
+            <div class="d-flex flex-row">
+              <div class="p-4 align-self-start">
+                <i class="fa fa-check"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas, architecto, quaerat. Quis cum eius itaque ipsa magni quam, illo molestias
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div 
+              *ngIf="!authService.loggedIn()"
+              class="card bg-primary text-center card-form signup-margin card-height">
+              <div class="card-body">
+                <h3>Sign Up Today</h3>
+                <form [formGroup]="registerForm" (ngSubmit)="register()" class="form-margin">
+                  <hr>
+                
+                  <div class="form-group input-margin-top">
+                      <label class="control-label" style="margin-right:10px">I am a: </label>
+                      <label class="radio-inline">
+                        <input class="mr-2" type="radio" value="student" formControlName="teacherOrStudent">Student
+                      </label>
+                      <label class="radio-inline ml-2">
+                        <input class="mr-2" type="radio" value="teacher" formControlName="teacherOrStudent">Teacher
+                      </label>
+                    </div>
+                
+                    <div class="form-group input-margin-top">
+                      <label class="control-label" style="margin-right:10px">I am a: </label>
+                      <label class="radio-inline">
+                        <input class="mr-3" type="radio" value="male" formControlName="gender">Male
+                      </label>
+                      <label class="radio-inline ml-3">
+                        <input class="mr-3" type="radio" value="female" formControlName="gender">Female
+                      </label>
+                    </div>
+                
+                  <div class="form-group input-margin-top">
+                    <input type="text" 
+                      [ngClass]="{'is-invalid': registerForm.get('username').errors 
+                        && registerForm.get('username').touched}"
+                      class="form-control" 
+                      formControlName="username" 
+                      placeholder="Username">
+                    <div class="invalid-feedback">Please choose a username</div>
+                  </div>
+                
+                  <div class="form-group input-margin-top">
+                    <input [ngClass]="{'is-invalid': registerForm.get('knownAs').errors && registerForm.get('knownAs').touched}" class="form-control"
+                      placeholder="Known as" formControlName="knownAs">
+                    <div class="invalid-feedback" *ngIf="registerForm.get('knownAs').touched && registerForm.get('knownAs').hasError('required')">Known as is required</div>
+                  </div>
+                
+                  <div class="form-group input-margin-top">
+                    <input [ngClass]="{'is-invalid': registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched}" class="form-control"
+                      placeholder="Date of Birth" formControlName="dateOfBirth" type="text" bsDatepicker [bsConfig]="bsConfig">
+                    <div class="invalid-feedback" *ngIf="registerForm.get('dateOfBirth').touched && registerForm.get('dateOfBirth').hasError('required')">Date of Birth is required</div>
+                  </div>
+
+                  <div class="form-group input-margin-top">
+                    <select [ngClass]="{'is-invalid': registerForm.get('interestId').errors && registerForm.get('interestId').touched}" formControlName="interestId" class="form-control">
+                      <option value=""></option>
+                      <option *ngFor="let interest of interests" [value]="interest.id">{{ interest.name }}</option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="registerForm.get('interestId').touched && registerForm.get('interestId').hasError('required')">Interest is required</div>
+                  </div>
+                
+                  <div formGroupName="address">
+                    <div class="form-group input-margin-top">
+                      <input [ngClass]="{'is-invalid': registerForm.get('address.city').errors && registerForm.get('address.city').touched}" class="form-control"
+                        placeholder="City" formControlName="city">
+                      <div class="invalid-feedback" *ngIf="registerForm.get('address.city').touched && registerForm.get('address.city').hasError('required')">City is required</div>
+                    </div>
+                    
+                    <div class="form-group input-margin-top">
+                      <input [ngClass]="{'is-invalid': registerForm.get('address.province').errors && registerForm.get('address.province').touched}" class="form-control"
+                        placeholder="Province" formControlName="province">
+                      <div class="invalid-feedback" *ngIf="registerForm.get('address.province').touched && registerForm.get('address.province').hasError('required')">City is required</div>
+                    </div>
+                  </div>
+                
+                  <div class="form-group input-margin-top">
+                    <input type="password" 
+                      [ngClass]="{'is-invalid': registerForm.get('password').errors 
+                        && registerForm.get('password').touched}"
+                      class="form-control" 
+                      formControlName="password" 
+                      placeholder="Password">
+                    <div class="invalid-feedback" 
+                      *ngIf="registerForm.get('password').hasError('required') 
+                        && registerForm.get('password').touched">
+                        Password is required
+                    </div>
+                    <div class="invalid-feedback" 
+                      *ngIf="registerForm.get('password').hasError('minlength') 
+                        && registerForm.get('password').touched">
+                        Password must be at least 4 characters
+                    </div>
+                    <div class="invalid-feedback" 
+                      *ngIf="registerForm.get('password').hasError('maxlength') 
+                        && registerForm.get('password').touched">
+                        Password cannot exceed 8 characters
+                     </div>
+                  </div>
+                
+                  <div class="form-group input-margin-top">
+                    <input 
+                      [ngClass]="{'is-invalid': registerForm.get('confirmPassword').errors 
+                        && registerForm.get('confirmPassword').touched
+                        || registerForm.get('confirmPassword').touched
+                        && registerForm.hasError('mismatch')}"
+                      type="password" 
+                      class="form-control" 
+                      formControlName="confirmPassword" 
+                      placeholder="Confirm Password">
+                    <div class="invalid-feedback" 
+                      *ngIf="registerForm.get('confirmPassword').hasError('required') 
+                        && registerForm.get('confirmPassword').touched">
+                        Confirm Password is required
+                    </div>
+                    <div class="invalid-feedback" 
+                      *ngIf="registerForm.hasError('mismatch') 
+                        && registerForm.get('confirmPassword').touched">
+                        Passwords must match
+                    </div>
+                  </div>
+                
+                  <div class="form-group text-center">
+                    <button class="btn btn-success" [disabled]="!registerForm.valid" type="submit">Register</button>
+                  </div>
+                </form>
+                <!-- <form>
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-lg" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <input type="email" class="form-control form-control-lg" placeholder="Email">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control form-control-lg" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control form-control-lg" placeholder="Confirm Password">
+                  </div>
+                  <input type="submit" class="btn btn-outline-light btn-block">
+                </form> -->
+              </div>
+            </div>
+            <div *ngIf="authService.loggedIn()">
+              <img src="../../assets/logo.png" height="500" width="500" alt="" class="img-fluid image-styling">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

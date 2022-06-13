@@ -1,0 +1,642 @@
+
+
+<header id="main-header" class="py-2 bg-info text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 align-content-center">
+        <h1 class="d-inline-block"><i class="fa fa-user mr-4"></i>{{ group.user?.knownAs }}</h1>
+        <a 
+          *ngIf="authService.decodedToken.nameid == group.user?.id" 
+          routerLink="/video/calling/" 
+          class="btn btn-primary ml-3">Video Call</a>
+      </div>
+      <div class="col-md-6">
+        <div class="float-lg-right float-sm-center">
+          <p class="h6 justify"><span class="font-weight-bold text-uppercase">Group Created</span> {{ group.dateCreated | date:'medium' }}</p>
+          <p class="h6 justify"><span class="font-weight-bold text-uppercase">Last updated</span> {{ group.lastUpdated | date:'medium' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="showcase" class="py-5">
+  <div class="primary-overlay text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 text-center">
+          <h2 class="display-4 mt-5 pt-5">
+            BE ADDICTED TO PASSIONS, NOT YOUR DISTRACTION
+          </h2>
+          <p class="lead">Every morning you have two choices: continue to sleep with you dreams, or wake up and chase up.</p>
+          <a class="btn btn-outline-secondary btn-lg text-white cursor-pointer" (click)="openModalForPrivacy(privacy)">
+            <i class="fa fa-arrow-right"></i> Read More</a>
+        </div>
+        <div class="col-lg-6">
+          <img src="../../../assets/logo.png" alt="" class="img-fluid d-none d-lg-block">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- News Letters -->
+  <section id="newsLetter" class="py-5 text-center bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              News Letters
+              <button 
+                *ngIf="authService.decodedToken.nameid == group.user?.id"
+                (click)="openModalForNews(news)"
+                class="btn btn-outline-primary btn-sm">Add News</button>
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, here are the updated group news.
+            </p>
+          </div>
+
+          <!-- ACCORDION -->
+          <accordion [isAnimated]="true" [closeOthers]="oneAtATime">
+            <accordion-group *ngFor="let news of groupNews">
+                <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                  <div class="pull-left float-left">{{ news.title }}</div>
+                  <span 
+                    *ngIf="authService.decodedToken.nameid == group.user?.id" 
+                    class="float-right pull-right">
+                      <button 
+                      (click)="openModalForNewsUpdate(updateNews, news)"
+                      class="btn btn-outline-primary btn-sm">Update
+                    </button>
+                    <button 
+                        (click)="removeNews(news.id)"
+                        class="btn btn-outline-danger btn-sm ml-2">Remove
+                    </button>
+                  </span>
+                </button>
+                {{ news.description }}
+              </accordion-group>
+          </accordion>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ACTIONS -->
+  <!-- <section id="action" class="py-4 mb-4 bg-light">
+    <div class="container">
+      <div class="row">
+        <div *ngIf="this.authService.decodedToken.nameid == group.user?.id" class="col-md-3">
+          <a class="btn btn-primary btn-block">
+            <button class="btn btn-primary fa fa-plus" (click)="openModalWithComponent()">Add Post</button>
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a class="btn btn-warning btn-block" data-toggle="modal" data-target="#addUserModal">
+            <i class="fa fa-plus"></i> Add User
+          </a>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section id="post" class="py-5 text-center bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              Group posts
+              <button 
+                *ngIf="authService.decodedToken.nameid == group.user?.id"
+                (click)="openModalWithComponent()"
+                class="btn btn-outline-primary btn-sm">Add Posts</button>
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, these are the updated news.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="card">
+            <div class="card-header">
+              <h4 *ngIf="group.posts?.length == 0; else post">Admin has not posted any update yet</h4>
+              <ng-template #post>
+                <h4>Latest Posts</h4>
+              </ng-template>              
+            </div>
+            <table *ngIf="group.posts?.length != 0; else noPost" class="table table-striped">
+              <thead class="thead-inverse">
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Date Posted</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let post of group.posts">
+                  <td scope="row">{{ post.id }}</td>
+                  <td>{{ post.title }}</td>
+                  <td>{{ post.postCategory?.name }}</td>
+                  <td>{{ post.datePosted | date:'medium' }}</td>
+                  <td>
+                    <a (click)="openModalWithPostDetails(postDetails, post.id)" class="btn btn-secondary">
+                      <i class="fa fa-angle-double-right"></i> Details
+                    </a>
+                  </td>
+                  <td 
+                    *ngIf="this.authService.decodedToken.nameid == group.user?.id">
+                    <a (click)="openModalWithClass(fileTemplate, post.id)" class="btn btn-secondary">
+                    <i class="fa fa-angle-double-right"></i> Add files
+                  </a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card text-center bg-success text-white mb-3">
+            <div class="card-body">
+              <h5>Subject:- {{group.subject}}</h5>
+              <h5>Section:- {{group.section}}</h5>
+              <h5>Room # {{group.room}}</h5>
+              <h1 class="display-4">
+                <i class="fa fa-folder-open-o"></i>
+              </h1>
+            </div>
+          </div>
+
+          <div class="card text-center bg-primary text-white mb-3">
+            <div class="card-body">
+              <h3>Posts</h3>
+              <h1 class="display-4">
+                <i class="fa fa-pencil"></i> {{group.posts?.length}}
+              </h1>
+            </div>
+          </div>
+
+          <div class="card text-center bg-warning text-white mb-3">
+            <div class="card-body">
+              <h3>Subscriber</h3>
+              <h1 class="display-4">
+                <i class="fa fa-users"></i> {{groupUsers.length}}
+              </h1>
+              <a [routerLink]="['/group/users/', groupId]" class="btn btn-outline-light btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- POSTS -->
+  <!-- <section id="posts">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9">
+
+          <div class="card mt-3">
+            <div class="card-body">
+              <p class="lead justify">{{group.description}}</p>
+            </div>
+          </div> 
+          <button 
+            [disabled]="this.authService.decodedToken.nameid != group.user?.id" 
+            class="btn btn-danger pull-right mt-3" 
+            (click)="onDeleteGroup()">
+            Delete Group
+          </button>         
+        </div>
+        
+        <div class="col-md-3">
+
+        </div>
+      </div>
+    </div>
+  </section>   -->
+
+  
+  <section id="newsLetter" class="py-5 text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              Comments Section
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, here are the latest commments.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card card-width mb-5">
+        <form #commentform="ngForm" (ngSubmit)="addComment()">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2">
+                <img src="../../../assets/user.png" class="ml-1 img image-height-new-comment img-rounded img-fluid"/>
+              </div>
+              <div class="col-8">
+                <textarea placeholder="Add comment" cols="30" rows="2" class="form-control mt-2" [(ngModel)]="comment.message" name="message" required></textarea>
+              </div>
+            </div>
+            <button [disabled]="commentform.form.invalid" class="btn btn-primary margin-left">Add</button>
+          </div>
+        </form>
+      </div>
+  
+  
+    </div>
+  </section>
+
+  <div class="container">
+
+    <div class="card">
+        <div class="card-body">
+            <h3 *ngIf="groupComments.length == 0">No comments yet</h3>
+            <div *ngFor="let comment of groupComments" class="row mb-2">
+                <div class="col-md-2">
+                    <img src="{{comment.user.url || '../../../assets/user.png'}}" class="img image-height-comment img-rounded img-fluid"/>
+                    <p class="text-secondary text-center pull-left mt-1">{{ comment.dateAdded | date: 'mediumDate' }}</p>
+                </div>
+                <div class="col-md-10">
+                  <p>
+                      <a class="float-left" [routerLink]="['/members/', comment.user.id]"><strong>{{ comment.user.knownAs }}</strong></a>
+                      <!-- <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                      <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                      <span class="float-right"><i class="text-warning fa fa-star"></i></span> -->
+  
+                  </p>
+                  <div class="clearfix"></div>
+                  <p>{{ comment.message }}</p>
+                  <p>
+                    <button [disabled]="comment.user.id != authService.decodedToken.nameid" (click)="deleteComment(comment.id)" class="pull-right btn btn-danger"><i class="fa fa-trash-o mr-1"></i>Delete</button>
+                      <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
+                      <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
+                  </p>
+                </div>
+            </div>
+              <!-- <div class="card card-inner">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="../../../assets/user.png" class="img img-rounded img-fluid"/>
+                                <p class="text-secondary text-center">15 Minutes Ago</p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><a href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman Akash</strong></a></p>
+                                <p>Lorem Ipsum is simpl software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <p>
+                                    <a class="float-right btn btn-outline-primary ml-2">  <i class="fa fa-reply"></i> Reply</a>
+                                    <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                               </p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+  </div>
+
+  <footer id="main-footer" class="bg-primary text-white mt-5 p-5">
+    <div class="conatiner">
+      <div class="row">
+        <div class="col">
+          <p class="lead text-center">Copyright &copy; 2020 Aumc</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Post Details Modal -->
+  <ng-template #template>
+    <form #editForm="ngForm">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Post Details</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="body">Title</label>
+          <input type="text" [(ngModel)]="postDetail.title" name="title" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="">Content</label>
+          <span class="fa fa-cloud-download cloud-size cursor-pointer" (click)="downloadPdf(postDetail.url, postDetail.title)"></span>
+          <!-- <input type="text" [(ngModel)]="postDetail.url" name="url" class="form-control-file"> -->
+        </div>
+        <div class="form-group">
+          <label for="body">Description</label>
+          <textarea [(ngModel)]="postDetail.description" name="description" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button *ngIf="this.authService.decodedToken.nameid == group.user?.id" class="btn btn-primary" (click)="submit()">Submit</button>
+        <button *ngIf="this.authService.decodedToken.nameid != group.user?.id" type="button" class="btn btn-default" (click)="modalRef.hide()">Close</button>
+        <button 
+          *ngIf="this.authService.decodedToken.nameid == group.user?.id" 
+          type="button" 
+          (click)="onDelete()"
+          class="btn btn-danger">Delete</button>
+      </div>    
+    </form>
+  </ng-template>  
+
+  <!-- USER MODAL -->
+  <div class="modal fade" id="addUserModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-white">
+          <h5 class="modal-title">Add User</h5>
+          <button class="close" data-dismiss="modal"><span>&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="name">Password</label>
+              <input type="password" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="name">Confirm Password</label>
+              <input type="password" class="form-control">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-warning" data-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <!-- Add file to the post  -->
+<ng-template #fileTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Add files</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row mt-3">
+            
+            <div class="col-md-3">
+        
+                <div ng2FileDrop
+                     [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                     (fileOver)="fileOverBase($event)"
+                     [uploader]="uploader"
+                     class="card bg-faded p-3 text-center mb-3 my-drop-zone">
+                     <i class="fa fa-upload fa-3x"></i>
+                    Drop File Here
+                </div>
+        
+                Single
+                <input type="file" ng2FileSelect [uploader]="uploader" />
+            </div>
+        
+            <div class="col-md-9" style="margin-bottom: 40px" *ngIf="uploader?.queue?.length">
+        
+                <h3>Upload queue</h3>
+                <p>Queue length: {{ uploader?.queue?.length }}</p>
+        
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="50%">Name</th>
+                        <th>Size</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                        <td><strong>{{ item?.file?.name }}</strong></td>
+                        <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                    </tr>
+                    </tbody>
+                </table>
+        
+                <div>
+                    <div>
+                        Queue progress:
+                        <div class="progress mb-4">
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-s"
+                            (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                        <span class="fa fa-upload"></span> Upload
+                    </button>
+                    <button type="button" class="btn btn-warning btn-s"
+                            (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                        <span class="fa fa-ban"></span> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-s"
+                            (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                        <span class="fa fa-trash"></span> Remove
+                    </button>
+                </div>
+            </div>
+        </div>        
+    </div>
+</ng-template>
+
+<ng-template #news>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <form>
+          <div class="form-group">
+              <input 
+                  [(ngModel)]="createNews.title" 
+                  name="title" type="text" 
+                  class="form-control" placeholder="Title">
+          </div>
+          <div class="form-group">
+              <textarea 
+                  [(ngModel)]="createNews.description" 
+                  name="description" cols="30" rows="5" 
+                  placeholder="Description" class="form-control"></textarea>
+          </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <button type="button" (click)="saveNews()" class="btn btn-primary">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #updateNews>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <form>
+          <div class="form-group">
+              <input 
+                  [(ngModel)]="createNews.title" 
+                  name="title" type="text" 
+                  class="form-control" placeholder="Title">
+          </div>
+          <div class="form-group">
+              <textarea 
+                  [(ngModel)]="createNews.description" 
+                  name="description" cols="30" rows="5" 
+                  placeholder="Description" class="form-control"></textarea>
+          </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <button type="button" (click)="saveNews()" class="btn btn-primary">Update</button>
+  </div>  
+</ng-template>
+
+<ng-template #privacy>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Privacy</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Please do not violate the privacy of the group, otherwise you will be blocked.</p>
+  </div>
+</ng-template>
+
+
+<!-- Post Details -->
+
+<ng-template #postDetails>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Post Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9">
+          <p>{{ postDetail.description }}</p>
+          <div *ngIf="postDetail.url != null; else noContent">
+            <h5>Please download this content</h5>
+            <span class="d-block">
+              <i class="fa fa-cloud-download cloud-size ml-5"></i>
+            </span>
+          </div>
+          <ng-template #noContent>
+            <p class="lead mt-5">No content upload by Group Admin</p>
+          </ng-template>
+        </div>
+        <div class="col-lg-3">
+          <div class="card text-center bg-success text-white mb-3">
+            <div class="card-body">
+              <h5>{{postDetail.title}}</h5>
+              <p>{{ postDetail.datePosted | date: 'mediumDate' }}</p>
+              <h5>{{ postDetail.postCategory.name }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <section id="newsLetter" class="py-5 text-center">
+          <div class="container">
+            <div class="card card-width mb-5">
+              <form #commentform="ngForm" (ngSubmit)="addPostComment(postDetail.id)">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-2">
+                      <img src="../../../assets/user.png" class="ml-1 img image-height-new-comment img-rounded img-fluid"/>
+                    </div>
+                    <div class="col-8">
+                      <textarea placeholder="Add comment" cols="30" rows="2" class="form-control mt-2" [(ngModel)]="postComment.message" name="message" required></textarea>
+                    </div>
+                  </div>
+                  <button [disabled]="commentform.form.invalid" class="btn btn-primary margin-left">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <div class="container">
+
+          <div class="card">
+              <div class="card-body">
+                  <h3 *ngIf="postComments.length == 0">No comments yet</h3>
+                  <div *ngFor="let comment of postComments" class="row mb-2">
+                      <div class="col-md-2">
+                          <img src="{{comment.user.url || '../../../assets/user.png'}}" class="img image-height-comment img-rounded img-fluid"/>
+                          <p class="text-secondary text-center pull-left mt-1">{{ comment.dateAdded | date: 'mediumDate' }}</p>
+                      </div>
+                      <div class="col-md-10">
+                        <p>
+                            <a class="float-left" [routerLink]="['/members/', comment.user.id]"><strong>{{ comment.user.knownAs }}</strong></a>
+                            <!-- <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                              <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                            <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                            <span class="float-right"><i class="text-warning fa fa-star"></i></span> -->
+        
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>{{ comment.message }}</p>
+                        <p>
+                          <button [disabled]="comment.user.id != authService.decodedToken.nameid" (click)="deletePostComment(comment.id)" class="pull-right btn btn-danger"><i class="fa fa-trash-o mr-1"></i>Delete</button>
+                            <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
+                            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
+                        </p>
+                      </div>
+                  </div>
+                    <!-- <div class="card card-inner">
+                          <div class="card-body">
+                              <div class="row">
+                                  <div class="col-md-2">
+                                      <img src="../../../assets/user.png" class="img img-rounded img-fluid"/>
+                                      <p class="text-secondary text-center">15 Minutes Ago</p>
+                                  </div>
+                                  <div class="col-md-10">
+                                      <p><a href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman Akash</strong></a></p>
+                                      <p>Lorem Ipsum is simpl software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                      <p>
+                                          <a class="float-right btn btn-outline-primary ml-2">  <i class="fa fa-reply"></i> Reply</a>
+                                          <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                                     </p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div> -->
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

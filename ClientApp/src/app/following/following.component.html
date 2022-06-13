@@ -1,0 +1,17 @@
+
+<div class="text-center mt-3">
+    <h3 *ngIf="users.length != 0">Who I'm following</h3>
+    <h3 *ngIf="users.length == 0">You are not following any user yet</h3>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div *ngFor="let user of users" class="col-sm-6 col-md-4 col-lg-4 col-xl-2">
+      <app-member-card 
+        [user]="user.follower" 
+        [unFollowLink]="true" 
+        (removeUserId)="removeUserFromList($event)">
+      </app-member-card>
+    </div>
+  </div>
+</div>

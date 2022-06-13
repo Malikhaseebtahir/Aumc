@@ -1,0 +1,446 @@
+<!-- <body>
+
+
+    
+    <section id="showCase" class="py-5">
+        <div class="primary-overlay text-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 text-center">
+                        <h1 class="display-2 mt-5 pt-5">
+                            So What You Dream Of...
+                        </h1>
+                        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, velit.</p>
+                        <a class="btn btn-outline-secondary btn-lg text-white cursor-pointer">
+                            <i class="fa fa-arrow-down"></i> Read More
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="../../../assets/logo.png" class="img-fluid d-none d-lg-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="news-letter" class="my-5 py-5 text-center bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-primary pb-3">News Letters</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+      
+        
+</body> -->
+
+<header id="main-header" class="py-2 bg-info text-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1><i class="fa fa-user mr-4"></i>{{ group.user?.knownAs }}</h1>
+      </div>
+      <div class="col-md-6">
+        <div class="float-lg-right float-sm-center">
+          <p class="h6 justify"><span class="font-weight-bold text-uppercase">Group Created</span> {{ group.dateCreated | date:'medium' }}</p>
+          <p class="h6 justify"><span class="font-weight-bold text-uppercase">Last updated</span> {{ group.lastUpdated | date:'medium' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<section id="showcase" class="py-5">
+  <div class="primary-overlay text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 text-center">
+          <h1 class="display-2 mt-5 pt-5">
+            So What You Dream Of...
+          </h1>
+          <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, quas.</p>
+          <a class="btn btn-outline-secondary btn-lg text-white cursor-pointer" (click)="openModalForPrivacy(privacy)">
+            <i class="fa fa-arrow-right"></i> Read More</a>
+        </div>
+        <div class="col-lg-6">
+          <img src="../../../assets/logo.png" alt="" class="img-fluid d-none d-lg-block">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- News Letters -->
+  <section id="newsLetter" class="py-5 text-center bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              News Letters
+              <button 
+                *ngIf="authSerivce.decodedToken.nameid == group.userId"
+                (click)="openModal(news)"
+                class="btn btn-outline-primary btn-sm">Add News</button>
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, here are the update group posts.
+            </p>
+          </div>
+
+          <!-- ACCORDION -->
+          <accordion [isAnimated]="true" [closeOthers]="oneAtATime">
+            <accordion-group *ngFor="let news of groupNews">
+              <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                <div class="pull-left float-left">{{ news.title }}</div>
+                <span 
+                  *ngIf="authSerivce.decodedToken.nameid == group.userId" 
+                   class="float-right pull-right">
+                    <button 
+                    (click)="openModalForNewsUpdate(updateNews, news)"
+                    class="btn btn-outline-primary btn-sm">Update
+                  </button>
+                  <button 
+                      (click)="removeNews(news.id)"
+                      class="btn btn-outline-danger btn-sm ml-2">Remove
+                  </button>
+                </span>
+              </button>
+              {{ news.description }}
+            </accordion-group>
+          </accordion>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="post" class="py-5 text-center bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              Group posts
+              <button 
+                (click)="openModalForNewPost(newPost)"
+                class="btn btn-outline-primary btn-sm">Add Posts</button>
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, these are the updated news.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="row">
+            <div *ngFor="let post of groupPosts" class="col-lg-3 col-md-6">
+              <div class="card card-width" (click)="openModalWithPostDetails(postDetails, post.id)">
+                <div class="card-body">
+                  <img src="../../../assets/user.png" alt="" class="img-fluid rounded-circle w-50 mb-3 image-styling">
+                  <h4>{{ post.user.knownAs }}</h4>
+                  <h5 class="text-muted">{{ post.title }}</h5>
+                  <p> {{ post.description }}</p>
+                  <!-- <div class="d-flex flex-row justify-content-center">
+                    <div class="p-4">
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </div>
+                    <div class="p-4">
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </div>
+                    <div class="p-4">
+                      <a href="#"><i class="fa fa-instagram"></i></a>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card text-center bg-primary text-white mb-3">
+            <div class="card-body">
+              <h3>Posts</h3>
+              <h1 class="display-4">
+                <i class="fa fa-pencil"></i> {{groupPosts?.length}}
+                <!-- <i class="fa fa-pencil"></i> 1 -->
+              </h1>
+            </div>
+          </div>
+
+          <div class="card text-center bg-success text-white mb-3">
+            <div class="card-body">
+              <h3>Pending Posts</h3>
+              <h1 class="display-4">
+                <i class="fa fa-pencil"></i> {{pendingPosts?.length}}
+                <!-- <i class="fa fa-pencil"></i> 1 -->
+              </h1>
+              <a [routerLink]="['/student/group/pending-required', groupId]" class="btn btn-outline-light btn-sm">View</a>
+            </div>          
+          </div>
+
+          <div class="card text-center bg-warning text-white mb-3">
+            <div class="card-body">
+              <h3>Subscriber</h3>
+              <h1 class="display-4">
+                <i class="fa fa-users"></i> {{ groupUsers.length }}
+              </h1>
+              <a [routerLink]="['/student/group/users/', groupId]" class="btn btn-outline-light btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="newsLetter" class="py-5 text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+              Comments Section
+            </h1>
+            <p class="lead pb-3">
+              Hello guys, here are the latest commments.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card comment-card-width mb-5">
+        <form #commentform="ngForm" (ngSubmit)="addComment()">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-2">
+                <img src="../../../assets/user.png" class="ml-1 img image-height-new-comment img-rounded img-fluid"/>
+              </div>
+              <div class="col-8">
+                <textarea placeholder="Add comment" cols="30" rows="2" class="form-control mt-2" [(ngModel)]="comment.message" name="message" required></textarea>
+              </div>
+            </div>
+            <button [disabled]="commentform.form.invalid" class="btn btn-primary margin-left">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h3 *ngIf="groupComments.length == 0">No comments yet</h3>
+            <div *ngFor="let comment of groupComments" class="row mb-2">
+                <div class="col-md-2">
+                    <img src="{{comment.user.url || '../../../assets/user.png'}}" class="img image-height-comment img-rounded img-fluid"/>
+                    <p class="text-secondary text-center pull-left mt-1">{{ comment.dateAdded | date: 'mediumDate' }}</p>
+                </div>
+                <div class="col-md-10">
+                  <p>
+                      <a class="float-left" [routerLink]="['/members/', comment.user.id]"><strong>{{ comment.user.knownAs }}</strong></a>
+                      <!-- <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                        <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                      <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                      <span class="float-right"><i class="text-warning fa fa-star"></i></span> -->
+  
+                  </p>
+                  <div class="clearfix"></div>
+                  <p>{{ comment.message }}</p>
+                  <p>
+                    <button [disabled]="comment.user.id != authSerivce.decodedToken.nameid" (click)="deleteComment(comment.id)" class="pull-right btn btn-danger"><i class="fa fa-trash-o mr-1"></i>Delete</button>
+                      <!-- <a class="float-right btn btn-outline-primary ml-2"> <i class="fa fa-reply"></i> Reply</a>
+                      <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a> -->
+                  </p>
+                </div>
+            </div>
+              <!-- <div class="card card-inner">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="../../../assets/user.png" class="img img-rounded img-fluid"/>
+                                <p class="text-secondary text-center">15 Minutes Ago</p>
+                            </div>
+                            <div class="col-md-10">
+                                <p><a href="https://maniruzzaman-akash.blogspot.com/p/contact.html"><strong>Maniruzzaman Akash</strong></a></p>
+                                <p>Lorem Ipsum is simpl software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <p>
+                                    <a class="float-right btn btn-outline-primary ml-2">  <i class="fa fa-reply"></i> Reply</a>
+                                    <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                               </p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+  </div>
+
+
+
+  
+  <!-- Modals -->
+
+<ng-template #news>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+      <form>
+          <div class="form-group">
+              <input 
+                  [(ngModel)]="createNews.title" 
+                  name="title" type="text" 
+                  class="form-control" placeholder="Title">
+          </div>
+          <div class="form-group">
+              <textarea 
+                  [(ngModel)]="createNews.description" 
+                  name="description" cols="30" rows="5" 
+                  placeholder="Description" class="form-control"></textarea>
+          </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <button type="button" (click)="saveNews()" class="btn btn-primary">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #updateNews>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input 
+                    [(ngModel)]="createNews.title" 
+                    name="title" type="text" 
+                    class="form-control" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <textarea 
+                    [(ngModel)]="createNews.description" 
+                    name="description" cols="30" rows="5" 
+                    placeholder="Description" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="saveNews()" class="btn btn-primary">Update</button>
+    </div>  
+</ng-template>
+
+<ng-template #newPost>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <input type="text" [(ngModel)]="groupPost.title" name="title" class="form-control" placeholder="Post Title">
+      </div>
+
+      <div class="form-group">
+        <textarea [(ngModel)]="groupPost.description" name="description" cols="30" rows="5" class="form-control" placeholder="Description"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="addPost()" class="btn btn-primary">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #privacy>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Privacy</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="lead">Please do not upload the irrelevent content, otherwise you will be blocked.</p>
+  </div>
+</ng-template>
+
+<ng-template #postDetails>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Post Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9">
+          <p>Hello Post</p>
+        </div>
+        <div class="col-lg-3">
+          <div class="card text-center bg-success text-white mb-3">
+            <div class="card-body">
+              <h5>{{ postDetail.title }}</h5>
+              <p>{{ postDetail.dateAdded | date: 'mediumDate' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <section id="newsLetter" class="py-5 text-center">
+          <div class="container">
+            <div class="card comment-card-width mb-5">
+              <form #commentform="ngForm" (ngSubmit)="addPostComment(postDetail.id)">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-2">
+                      <img src="../../../assets/user.png" class="ml-1 img image-height-new-comment img-rounded img-fluid"/>
+                    </div>
+                    <div class="col-8">
+                      <textarea placeholder="Add comment" cols="30" rows="2" class="form-control mt-2" [(ngModel)]="postComment.message" name="message" required></textarea>
+                    </div>
+                  </div>
+                  <button [disabled]="commentform.form.invalid" class="btn btn-primary margin-left">Add</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <div class="container">
+
+          <div class="card">
+              <div class="card-body">
+                  <h3 *ngIf="postComments.length == 0">No comments yet</h3>
+                  <div *ngFor="let comment of postComments" class="row mb-2">
+                      <div class="col-md-2">
+                          <img src="{{comment.user.url || '../../../assets/user.png'}}" class="img image-height-comment img-rounded img-fluid"/>
+                          <p class="text-secondary text-center pull-left mt-1">{{ comment.dateAdded | date: 'mediumDate' }}</p>
+                      </div>
+                      <div class="col-md-10">
+                        <p>
+                            <a class="float-left" [routerLink]="['/members/', comment.user.id]"><strong>{{ comment.user.knownAs }}</strong></a>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>{{ comment.message }}</p>
+                        <p>
+                          <button [disabled]="comment.user.id != authSerivce.decodedToken.nameid" (click)="deletePostComment(comment.id)" class="pull-right btn btn-danger"><i class="fa fa-trash-o mr-1"></i>Delete</button>
+                        </p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

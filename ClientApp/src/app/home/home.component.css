@@ -1,0 +1,52 @@
+#home-section{
+    background:url('../../assets/home.jpg') no-repeat;
+    background-size:cover;
+    background-attachment:fixed;
+    min-height:585px;
+}
+
+.fa{
+    color:#008ed6;;
+    background:#fff;
+    padding:4px;
+    border-radius:5px;
+    font-size:30px;;
+}
+  
+.dark-overlay{
+    background-color:rgba(0,0,0,0.7);
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    min-height:657px;
+}
+
+.home-inner{
+    padding-top:150px;
+}
+
+.card-form{
+    opacity:0.8;
+}
+
+.signup-margin{
+    margin-top: -60px;
+}
+
+.form-margin {
+    margin-top: -7px;
+}
+
+.input-margin-top {
+    margin-top: -12px;
+}
+
+.card-height {
+    height: 540px;
+}
+
+.image-styling {
+    height: 350px;
+    width: 350px;
+}

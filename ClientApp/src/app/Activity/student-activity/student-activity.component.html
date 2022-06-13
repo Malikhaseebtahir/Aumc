@@ -1,0 +1,54 @@
+<div class="container mt-5">
+    <h2>Student Panel</h2>
+    <button class="btn btn-primary" (click)="openModal(template)">Create New</button>
+    <div class="tab-panel">
+        <tabset class="member-tabset">
+        <tab heading="All Study Groups">
+            <div *ngFor="let group of allGroups">
+                <app-group-card [group]="group"></app-group-card>
+            </div>
+        </tab>
+        <tab heading="All Student Groups">
+            <div *ngFor="let group of studentGroups">
+                <app-group-card [group]="group"></app-group-card>
+            </div>            
+        </tab>
+        <tab heading="Groups I have created">
+            <div *ngFor="let group of groupOfCreators">
+                <app-group-card [group]="group"></app-group-card>
+            </div>            
+        </tab>        
+        <tab heading="Pending Requests">
+            <div *ngFor="let group of pendingRequests">
+                <app-pending-groups-management [group]="group"></app-pending-groups-management>
+            </div>            
+        </tab>
+        </tabset>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input type="text" [(ngModel)]="studentGroup.subject" name="subject" class="form-control" placeholder="Group Name">
+            </div>
+            <div class="form-group">
+                <textarea 
+                    [(ngModel)]="studentGroup.description" 
+                    name="description" cols="30" rows="5" 
+                    class="form-control" placeholder="Description"></textarea>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button (click)="saveStudentGroup()" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</ng-template>

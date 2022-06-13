@@ -1,0 +1,24 @@
+
+
+<div class="container">
+    <h4 class="mb-4">Interests for approval</h4>
+    <div *ngIf="interests.length != 0; else noInterest">
+        <div *ngFor="let interest of interests" class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <input  
+                        value="{{interest.name}}" 
+                        type="text" 
+                        readonly 
+                        class="form-control mb-1">
+                </div>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" (click)="onApprove(interest.id)">Approve</button>
+            </div>
+        </div>
+    </div>
+    <ng-template #noInterest>
+        <h3 class="ml-3">No Interest for approval</h3>        
+    </ng-template>
+</div>

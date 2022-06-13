@@ -1,0 +1,99 @@
+
+<section id="newsLetter" class="py-5 text-center bg-light">
+    <div class="container">
+        <div class="row">
+        <div class="col">
+            <div class="info-header mb-5">
+            <h1 class="text-primary pb-3 d-inline-block">
+                University News
+                <button
+                *ngIf="authService.decodedToken.role == 'Admin'"
+                (click)="openModalForNews(news)"
+                class="btn btn-outline-primary btn-sm">Add News</button>
+            </h1>
+            <p class="lead pb-3">
+                Hello guys, here are the updated university news.
+            </p>
+            </div>
+
+            <!-- ACCORDION -->
+            <accordion [isAnimated]="true" [closeOthers]="oneAtATime">
+            <accordion-group *ngFor="let news of groupNews">
+                <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+                    <div class="pull-left float-left">{{ news.title }}</div>
+                    <span 
+                        *ngIf="authService.decodedToken.role == 'Admin'"
+                        class="float-right pull-right">
+                            <button 
+                            (click)="openModalForNewsUpdate(updateNews, news)"
+                            class="btn btn-outline-primary btn-sm">Update
+                        </button>
+                        <button 
+                            (click)="removeNews(news.id)"
+                            class="btn btn-outline-danger btn-sm ml-2">Remove
+                        </button>
+                    </span>
+                </button>
+                {{ news.description }}
+                </accordion-group>
+            </accordion>
+        </div>
+        </div>
+    </div>
+</section>
+
+<ng-template #news>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">University News</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input 
+                    [(ngModel)]="createNews.title" 
+                    name="title" type="text" 
+                    class="form-control" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <textarea 
+                    [(ngModel)]="createNews.description" 
+                    name="description" cols="30" rows="5" 
+                    placeholder="Description" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="saveNews()" class="btn btn-primary">Submit</button>
+    </div>
+  </ng-template>
+
+  <ng-template #updateNews>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Modal</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <input 
+                    [(ngModel)]="createNews.title" 
+                    name="title" type="text" 
+                    class="form-control" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <textarea 
+                    [(ngModel)]="createNews.description" 
+                    name="description" cols="30" rows="5" 
+                    placeholder="Description" class="form-control"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="saveNews()" class="btn btn-primary">Update</button>
+    </div>  
+  </ng-template>

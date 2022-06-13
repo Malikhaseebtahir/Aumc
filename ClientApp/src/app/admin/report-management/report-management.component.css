@@ -1,0 +1,7 @@
+.verticalLine  {
+    border-left: 1px solid black;
+}
+
+.card {
+  height: 250px;
+}

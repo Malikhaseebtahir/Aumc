@@ -1,0 +1,97 @@
+<div class="container mt-4">
+  <div class="row">
+    <h1>{{user.knownAs}}'s Profile</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <img class="card-img-top img-thumbnail" src="{{user.photoUrl || '../../../assets/user.png'}}" alt="{{user.knownAs}}">
+        <div class="card-body">
+          
+          <div>
+            <strong>Location:</strong>
+            <p>{{user.address.city}}, {{user.address.province}}, {{user.address.country}}</p>
+          </div>
+          
+          <div>
+            <strong>Age:</strong>
+            <p>{{user.age}}</p>
+          </div>
+          
+          <div>
+            <strong>Last Active:</strong>
+            <p>{{user.lastActive | timeAgo}}</p>
+          </div>
+          
+          <div>
+            <strong>Member Since:</strong>
+            <p>{{user.created | date: 'mediumDate'}}</p>
+          </div>
+        </div>
+       
+        <div class="card-footer">
+          <div class="btn-group d-flex">
+            <button class="btn btn-outline-primary w-100" (click)="followUser()">Follow</button>
+            <button class="btn btn-outline-success w-100" (click)="selectTab(3)">Message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-8">
+      <div class="tab-panel">
+        <tabset class="member-tabset" #memberTabs>
+          <tab heading="About {{user.knownAs}}">
+            <h4>Description</h4>
+            <p>{{user.introduction}}</p>
+            <h4>Looking For</h4>
+            <p>{{user.lookingFor}}</p>
+          </tab>
+
+          <tab heading="Interests">
+            <h4>Interests</h4>
+            <div *ngIf="user.interest != null; else noInterest">
+              <p>{{user.interest.name}}</p>
+            </div>
+            <ng-template #noInterest>
+              <p>No interest add by user</p>
+            </ng-template>
+          </tab>
+
+          <tab heading="Photos">
+            <div *ngIf="user.photos.length != 0; else noPhotos">
+              <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+            </div>
+            <ng-template #noPhotos>
+              <h4 class="ml-3">No photo</h4>
+            </ng-template>
+          </tab>
+          
+          <tab heading="Messages">
+            <app-member-messages [recipientId]="user.id"></app-member-messages>
+          </tab>
+        </tabset>
+      </div>
+      <button class="btn btn-danger btn-sm pull-right mt-2" (click)="openModal(template)">Report User</button>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Report</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" [(ngModel)]="report.message" name="message" cols="30" rows="5" class="form-control"></textarea>
+      </div>
+      <button type="button" class="btn btn-primary pull-right" (click)="reportUser()">Submit</button>
+    </form>
+  </div>
+</ng-template>

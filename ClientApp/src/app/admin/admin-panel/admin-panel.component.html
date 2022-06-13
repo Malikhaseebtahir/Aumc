@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <h2>Admin Panel</h2>
+  <div class="tab-panel">
+    <tabset class="member-tabset">
+      <tab heading="User Management" *appHasRole="['Admin']">
+        <div class="container">
+            <app-user-management></app-user-management>
+        </div>
+      </tab>
+      <tab heading="Photo Management" *appHasRole="['Admin']">
+        <app-photo-management></app-photo-management>
+      </tab>
+      <tab heading="Group Management" *appHasRole="['Admin']">
+        <app-group-management></app-group-management>
+      </tab>
+      <tab heading="Student Group Management" *appHasRole="['Admin']">
+        <app-student-group-management></app-student-group-management>
+      </tab>
+      <tab heading="Interest Management" *appHasRole="['Admin']">
+        <app-interest-management></app-interest-management>
+      </tab>
+      <tab heading="Interest Approval" *appHasRole="['Admin']">
+        <app-interest></app-interest>
+      </tab>
+      <tab heading="Reports" *appHasRole="['Admin']">
+        <app-report-management></app-report-management>
+      </tab>
+      <tab heading="Disabled Users" *appHasRole="['Admin']">
+        <app-disabled-user></app-disabled-user>
+      </tab>
+    </tabset>
+  </div>
+</div>

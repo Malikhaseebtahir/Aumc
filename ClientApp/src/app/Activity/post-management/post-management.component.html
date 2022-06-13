@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-sm-2" *ngFor="let post of posts">
+      <h4>{{post.title}}</h4>
+      <!-- <img src="{{post.url}}" class="img-thumbnail p-1" alt="photo.title"> -->
+      
+      <div class="text-center">
+        <button type="button" class="btn btn-sm btn-success mr-1"
+          (click)="approvePost(post.id)">Approve</button>
+        <button type="button" class="btn btn-sm btn-danger"
+          (click)="rejectPost(post.id)">Reject</button>
+      </div>
+    </div>
+</div>
+  

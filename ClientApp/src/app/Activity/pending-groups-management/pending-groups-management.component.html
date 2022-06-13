@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row mb-5">
+        <div class="text-center">
+            <!-- <h4 *ngIf="pendingGroups.length == 0" class="mt-4">Not request</h4> -->
+            <!-- <h4 *ngIf="pendingGroups.length != 0" class="mt-4 mb-3">Group requests</h4> -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <div>
+                        <tabset>
+                          <tab heading="Group" id="tab1">
+                            <div class="card-body padding-right padding-left">
+                                <h5 class="card-title"><a [routerLink]="['/group/details', group.group.id]">{{ group.group.subject }}</a></h5>
+                                <p class="card-text">{{ group.group.description }}</p>
+                                <div *ngIf="group.group.user.teacherOrStudent == 'teacher'; else studentGroup">
+                                  <a (click)="approveRequest(group.group.id, group.user.id)" class="btn btn-success btn-sm ml-2">Approve</a>
+                                  <a (click)="rejectRequest(group.group.id, group.user.id)" class="btn btn-primary btn-sm">Reject</a>
+                                </div>
+                                <ng-template #studentGroup>
+                                  <a (click)="approveStudnetGroupRequest(group.group.id, group.user.id)" class="btn btn-success btn-sm ml-2">Approve</a>
+                                  <a (click)="rejectStudentGroupRequest(group.group.id, group.user.id)" class="btn btn-primary btn-sm">Reject</a>
+                                </ng-template>
+                              </div>  
+                          </tab>
+                          <tab heading="Member">
+                            <div class="card" style="width: 18rem;">
+                                <img class="mx-auto d-block rounded-circle mt-2" width = "100" height = "100" src="{{group.user.url || '../../../assets/user.png'}}" alt="Admin photo">
+                                <div class="card-body-user">
+                                  <h5 class="card-title">{{ group.user.knownAs }}</h5>
+                                  <p class="card-text">{{ group.teacherOrStudent }}</p>
+                                  <a [routerLink]="['/members/', group.user.id]" class="btn btn-primary">Details</a>
+                                </div>
+                            </div>                              
+                          </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>
